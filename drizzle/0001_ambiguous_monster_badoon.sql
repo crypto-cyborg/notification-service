@@ -1,0 +1,1 @@
+ALTER TABLE `notifications` ADD `user_id` text NOT NULL;
