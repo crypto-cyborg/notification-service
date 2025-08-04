@@ -5,6 +5,8 @@ const envSchema = z.object({
   SMTP_PORT: z.number().int().positive().default(587),
   SMTP_USER: z.string().nonempty(),
   SMTP_PASSWORD: z.string().nonempty(),
+
+  RABBIT_HOST: z.string().nonempty(),
 });
 
 export const env = envSchema.parse(process.env);

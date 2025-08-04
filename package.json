@@ -18,7 +18,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/amqplib": "^0.10.7",
     "@types/nodemailer": "^6.4.17",
+    "amqplib": "^0.10.8",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.8.4",
     "nodemailer": "^7.0.5",

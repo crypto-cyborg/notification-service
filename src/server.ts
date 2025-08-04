@@ -1,7 +1,10 @@
 import { Hono, type Context } from "hono";
 import notifications from "./routes/notifications";
+import { initializeEmailsQueue } from "./messaging/notifications-queue";
 
 const app = new Hono();
+
+await initializeEmailsQueue()
 
 app.get("/healthcheck", (c: Context) => {
   return c.json({ status: "ok" });
