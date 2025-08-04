@@ -1,10 +1,11 @@
+import { GetDatabase } from ".";
 import * as schema from "./schema";
-import { db } from "./index.ts";
 import { eq } from "drizzle-orm";
 
 export async function getUserNotifications(
   userId: string,
 ): Promise<schema.Notification[]> {
+  const db = GetDatabase();
   const res = await db
     .select()
     .from(schema.notification)
@@ -14,6 +15,7 @@ export async function getUserNotifications(
 }
 
 export async function InsertNotification(n: schema.Notification): Promise<schema.Notification | undefined> {
+  const db = GetDatabase();
   const res = await db
     .insert(schema.notification)
     .values(n)

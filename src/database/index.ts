@@ -1,7 +1,14 @@
 import { Database } from "bun:sqlite";
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { BunSQLiteDatabase, drizzle } from "drizzle-orm/bun-sqlite";
 
-const sqlite = new Database("data/notifications.db");
+let db: BunSQLiteDatabase | null = null;
 
-export const db = drizzle(sqlite);
+export function GetDatabase() {
+  if (!db) {
+    const sqlite = new Database("data/notifications.db");
 
+    db = drizzle(sqlite);
+  }
+
+  return db;
+}
