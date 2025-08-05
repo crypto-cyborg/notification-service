@@ -14,12 +14,11 @@ export async function getUserNotifications(
   return res;
 }
 
-export async function InsertNotification(n: schema.Notification): Promise<schema.Notification | undefined> {
+export async function InsertNotification(
+  n: Omit<schema.Notification, "id">,
+): Promise<schema.Notification | undefined> {
   const db = GetDatabase();
-  const res = await db
-    .insert(schema.notification)
-    .values(n)
-    .returning();
+  const res = await db.insert(schema.notification).values(n).returning();
 
   if (res.length === 0) {
     return undefined;

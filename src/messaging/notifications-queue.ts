@@ -1,6 +1,15 @@
 import type { ConsumeMessage } from "amqplib"
 import { GetChannel } from "./index"
 import { sendEmail, type IEmailOptions } from "../services/email-sender"
+import type { Notification } from "../database/schema"
+import { InsertNotification } from "../database/notifications-repo"
+import type { NotificationBody } from "./types"
+
+export interface IQueueItem {
+  userId: string,
+  createdAt: number,
+  body: NotificationBody
+}
 
 export async function initializeEmailsQueue() {
   const chan = await GetChannel()
@@ -18,10 +27,21 @@ export async function initializeEmailsQueue() {
       throw new Error("message content is empty")
     }
 
-    const obj: IEmailOptions = JSON.parse(json)
-    console.log(obj)
+    const obj: IQueueItem = JSON.parse(json)
+    const body = obj.body as IEmailOptions
 
-    await sendEmail(obj)
-    console.log(`Sent email to ${obj.to}`)
+    console.log(body)
+
+    await sendEmail(body)
+
+    const notification: Omit<Notification, "id"> = {
+      userId: obj.userId,
+      title: `Notification via email: ${body.subject}`,
+      text: body.html || body.text || "",
+      createdAt: obj.createdAt,
+    }
+    InsertNotification(notification)
+
+    console.log(`Sent email to ${body.to}`)
   })
 }
